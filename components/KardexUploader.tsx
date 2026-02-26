@@ -36,8 +36,12 @@ export default function KardexUploader() {
   const [rows, setRows] = useState<KardexRow[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [filename, setFilename] = useState<string | null>(null);
+  const [showAllRows, setShowAllRows] = useState(false);
 
-  const previewRows = useMemo(() => rows.slice(0, 10), [rows]);
+  const previewRows = useMemo(
+    () => (showAllRows ? rows : rows.slice(0, 10)),
+    [rows, showAllRows],
+  );
   const previewErrors = useMemo(() => errors.slice(0, 10), [errors]);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +51,7 @@ export default function KardexUploader() {
       setFilename(null);
       setRows([]);
       setErrors([]);
+      setShowAllRows(false);
       return;
     }
 
@@ -126,10 +131,12 @@ export default function KardexUploader() {
 
         setRows(validRows);
         setErrors(parseErrors);
+        setShowAllRows(false);
       },
       error: (error) => {
         setRows([]);
         setErrors([`No se pudo leer el archivo: ${error.message}`]);
+        setShowAllRows(false);
       },
     });
   };
@@ -158,7 +165,20 @@ export default function KardexUploader() {
           </div>
 
           <div>
-            <h3 className="mb-2 text-sm font-semibold text-gray-800">Preview (primeras 10 filas validas)</h3>
+            <div className="mb-2 flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-gray-800">
+                Preview ({showAllRows ? "todas las filas validas" : "primeras 10 filas validas"})
+              </h3>
+              {rows.length > 10 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllRows((prev) => !prev)}
+                  className="rounded-md border border-gray-300 bg-gray-50 px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100"
+                >
+                  {showAllRows ? "Mostrar solo 10" : "Mostrar todas"}
+                </button>
+              )}
+            </div>
             {previewRows.length === 0 ? (
               <p className="text-sm text-gray-600">Sin filas validas para mostrar.</p>
             ) : (
