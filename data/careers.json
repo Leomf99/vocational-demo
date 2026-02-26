@@ -1,32 +1,982 @@
 [
   {
-    "nombre": "Ingenieria en Sistemas",
-    "descripcion": "Enfocada en desarrollo de software y arquitectura de sistemas.",
-    "tags": ["tech", "math"]
+    "id": "ing_sistemas",
+    "name": "Ingeniería en Sistemas / Software",
+    "cluster": "Ingeniería y Tecnología",
+    "description": "Diseño y construcción de software, plataformas y sistemas.",
+    "tags": [
+      "tech",
+      "math"
+    ],
+    "weights": {
+      "tech": 0.65,
+      "math": 0.35
+    },
+    "minAreas": [
+      "tech"
+    ],
+    "roles": [
+      "Desarrollador/a de software",
+      "Ingeniero/a de backend",
+      "Ingeniero/a de frontend",
+      "QA Automation",
+      "DevOps (junior)"
+    ]
   },
   {
-    "nombre": "Ciencia de Datos",
-    "descripcion": "Analisis de datos, estadistica y modelos predictivos.",
-    "tags": ["math", "science", "tech"]
+    "id": "ciencia_datos",
+    "name": "Ciencia de Datos",
+    "cluster": "Ingeniería y Tecnología",
+    "description": "Análisis de datos, modelos predictivos y toma de decisiones basada en datos.",
+    "tags": [
+      "math",
+      "tech",
+      "science"
+    ],
+    "weights": {
+      "math": 0.5,
+      "tech": 0.35,
+      "science": 0.15
+    },
+    "minAreas": [
+      "math"
+    ],
+    "roles": [
+      "Data analyst",
+      "Data scientist (junior)",
+      "BI analyst",
+      "ML engineer (junior)",
+      "Analytics engineer (junior)"
+    ]
   },
   {
-    "nombre": "Derecho",
-    "descripcion": "Formacion en normas, argumentacion y procesos juridicos.",
-    "tags": ["language", "social"]
+    "id": "ciberseguridad",
+    "name": "Ciberseguridad",
+    "cluster": "Ingeniería y Tecnología",
+    "description": "Protección de sistemas, redes y datos contra amenazas y ataques.",
+    "tags": [
+      "tech",
+      "math"
+    ],
+    "weights": {
+      "tech": 0.75,
+      "math": 0.25
+    },
+    "minAreas": [
+      "tech"
+    ],
+    "roles": [
+      "Analista SOC (junior)",
+      "Pentester (junior)",
+      "Security analyst",
+      "GRC analyst",
+      "Administrador/a de seguridad"
+    ]
   },
   {
-    "nombre": "Diseno Grafico",
-    "descripcion": "Creacion visual para medios digitales e impresos.",
-    "tags": ["creative", "tech"]
+    "id": "ing_industrial",
+    "name": "Ingeniería Industrial",
+    "cluster": "Ingeniería y Tecnología",
+    "description": "Optimización de procesos, operaciones y sistemas productivos/servicios.",
+    "tags": [
+      "math",
+      "science",
+      "social"
+    ],
+    "weights": {
+      "math": 0.45,
+      "science": 0.35,
+      "social": 0.2
+    },
+    "minAreas": [
+      "math"
+    ],
+    "roles": [
+      "Ingeniero/a de procesos",
+      "Analista de mejora continua",
+      "Planeación de producción",
+      "Logística",
+      "Calidad"
+    ]
   },
   {
-    "nombre": "Psicologia",
-    "descripcion": "Estudio del comportamiento humano y salud mental.",
-    "tags": ["social", "science"]
+    "id": "ing_mecanica",
+    "name": "Ingeniería Mecánica",
+    "cluster": "Ingeniería y Tecnología",
+    "description": "Diseño y análisis de máquinas, mecanismos y sistemas mecánicos.",
+    "tags": [
+      "math",
+      "science"
+    ],
+    "weights": {
+      "math": 0.45,
+      "science": 0.55
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Diseño mecánico (junior)",
+      "Mantenimiento industrial",
+      "Ingeniero/a de pruebas",
+      "CAD designer",
+      "Ingeniero/a de manufactura"
+    ]
   },
   {
-    "nombre": "Comunicacion",
-    "descripcion": "Estrategias de narrativa, medios y expresion publica.",
-    "tags": ["language", "creative", "social"]
+    "id": "ing_electrica",
+    "name": "Ingeniería Eléctrica/Electrónica",
+    "cluster": "Ingeniería y Tecnología",
+    "description": "Circuitos, electrónica, sistemas eléctricos y control.",
+    "tags": [
+      "science",
+      "math",
+      "tech"
+    ],
+    "weights": {
+      "science": 0.5,
+      "math": 0.35,
+      "tech": 0.15
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Ingeniero/a de pruebas",
+      "Ingeniero/a de hardware (junior)",
+      "Técnico/a de instrumentación",
+      "Automatización (junior)",
+      "Soporte de electrónica"
+    ]
+  },
+  {
+    "id": "ing_civil",
+    "name": "Ingeniería Civil",
+    "cluster": "Ingeniería y Tecnología",
+    "description": "Diseño y gestión de obras: estructuras, vialidades, hidráulica y construcción.",
+    "tags": [
+      "math",
+      "science"
+    ],
+    "weights": {
+      "math": 0.45,
+      "science": 0.55
+    },
+    "minAreas": [
+      "math"
+    ],
+    "roles": [
+      "Residente de obra (junior)",
+      "Calculista (junior)",
+      "Topografía (junior)",
+      "Supervisor/a de obra",
+      "Costos y presupuestos"
+    ]
+  },
+  {
+    "id": "arquitectura",
+    "name": "Arquitectura",
+    "cluster": "Creativo y Diseño",
+    "description": "Diseño de espacios, proyectos arquitectónicos y planeación urbana.",
+    "tags": [
+      "creative",
+      "math",
+      "social"
+    ],
+    "weights": {
+      "creative": 0.55,
+      "math": 0.25,
+      "social": 0.2
+    },
+    "minAreas": [
+      "creative"
+    ],
+    "roles": [
+      "Dibujante arquitectónico",
+      "Modelador 3D (junior)",
+      "Render artist (junior)",
+      "Residente de obra (junior)",
+      "Diseño de interiores (junior)"
+    ]
+  },
+  {
+    "id": "diseno_grafico",
+    "name": "Diseño Gráfico / Comunicación Visual",
+    "cluster": "Creativo y Diseño",
+    "description": "Comunicación visual, branding, diseño editorial y digital.",
+    "tags": [
+      "creative",
+      "language",
+      "tech"
+    ],
+    "weights": {
+      "creative": 0.65,
+      "language": 0.25,
+      "tech": 0.1
+    },
+    "minAreas": [
+      "creative"
+    ],
+    "roles": [
+      "Diseñador/a gráfico",
+      "Diseñador/a de marca",
+      "Diseñador/a editorial",
+      "Content designer (junior)",
+      "Diseñador/a de redes"
+    ]
+  },
+  {
+    "id": "ux_ui",
+    "name": "Diseño UX/UI",
+    "cluster": "Creativo y Diseño",
+    "description": "Diseño de experiencias e interfaces centradas en el usuario.",
+    "tags": [
+      "creative",
+      "tech",
+      "language"
+    ],
+    "weights": {
+      "creative": 0.45,
+      "tech": 0.35,
+      "language": 0.2
+    },
+    "minAreas": [
+      "creative"
+    ],
+    "roles": [
+      "UX designer (junior)",
+      "UI designer",
+      "Product designer (junior)",
+      "UX researcher (junior)",
+      "Content designer (junior)"
+    ]
+  },
+  {
+    "id": "animacion",
+    "name": "Animación y Arte Digital",
+    "cluster": "Creativo y Diseño",
+    "description": "Animación 2D/3D, motion graphics y producción digital.",
+    "tags": [
+      "creative",
+      "tech"
+    ],
+    "weights": {
+      "creative": 0.75,
+      "tech": 0.25
+    },
+    "minAreas": [
+      "creative"
+    ],
+    "roles": [
+      "Animador/a 2D",
+      "Animador/a 3D (junior)",
+      "Motion designer",
+      "Modelador/a 3D (junior)",
+      "Artista de VFX (junior)"
+    ]
+  },
+  {
+    "id": "produccion_audiovisual",
+    "name": "Producción Audiovisual",
+    "cluster": "Creativo y Diseño",
+    "description": "Guion, producción, edición y realización audiovisual.",
+    "tags": [
+      "creative",
+      "language"
+    ],
+    "weights": {
+      "creative": 0.65,
+      "language": 0.35
+    },
+    "minAreas": [
+      "creative"
+    ],
+    "roles": [
+      "Editor/a de video",
+      "Asistente de producción",
+      "Camarógrafo/a (junior)",
+      "Postproducción (junior)",
+      "Guionista (junior)"
+    ]
+  },
+  {
+    "id": "publicidad_marketing",
+    "name": "Publicidad y Marketing",
+    "cluster": "Negocios",
+    "description": "Estrategia de marca, comunicación, campañas y análisis de mercado.",
+    "tags": [
+      "language",
+      "social",
+      "creative",
+      "math"
+    ],
+    "weights": {
+      "language": 0.35,
+      "social": 0.3,
+      "creative": 0.2,
+      "math": 0.15
+    },
+    "roles": [
+      "Ejecutivo/a de cuenta (junior)",
+      "Marketing assistant",
+      "Community manager",
+      "Analista de marketing (junior)",
+      "Copywriter (junior)"
+    ]
+  },
+  {
+    "id": "administracion",
+    "name": "Administración de Empresas",
+    "cluster": "Negocios",
+    "description": "Gestión organizacional, operaciones, finanzas y recursos humanos.",
+    "tags": [
+      "social",
+      "math",
+      "language"
+    ],
+    "weights": {
+      "social": 0.45,
+      "math": 0.35,
+      "language": 0.2
+    },
+    "roles": [
+      "Analista administrativo",
+      "Recursos humanos (junior)",
+      "Compras",
+      "Asistente de dirección",
+      "Operaciones (junior)"
+    ]
+  },
+  {
+    "id": "contaduria",
+    "name": "Contaduría",
+    "cluster": "Negocios",
+    "description": "Registro y análisis financiero, contabilidad y cumplimiento fiscal.",
+    "tags": [
+      "math",
+      "social"
+    ],
+    "weights": {
+      "math": 0.7,
+      "social": 0.3
+    },
+    "minAreas": [
+      "math"
+    ],
+    "roles": [
+      "Auxiliar contable",
+      "Analista de cuentas",
+      "Nómina (junior)",
+      "Auditoría (junior)",
+      "Facturación"
+    ]
+  },
+  {
+    "id": "finanzas",
+    "name": "Finanzas",
+    "cluster": "Negocios",
+    "description": "Gestión financiera, inversión, riesgo y planeación económica.",
+    "tags": [
+      "math",
+      "social"
+    ],
+    "weights": {
+      "math": 0.75,
+      "social": 0.25
+    },
+    "minAreas": [
+      "math"
+    ],
+    "roles": [
+      "Analista financiero (junior)",
+      "Planeación financiera (junior)",
+      "Riesgo (junior)",
+      "Tesorería (junior)",
+      "Banca (junior)"
+    ]
+  },
+  {
+    "id": "economia",
+    "name": "Economía",
+    "cluster": "Negocios",
+    "description": "Análisis económico, políticas públicas y mercados.",
+    "tags": [
+      "math",
+      "social"
+    ],
+    "weights": {
+      "math": 0.55,
+      "social": 0.45
+    },
+    "roles": [
+      "Analista económico (junior)",
+      "Investigación de mercados",
+      "Analista de datos (econ)",
+      "Consultoría (junior)",
+      "Sector público (junior)"
+    ]
+  },
+  {
+    "id": "actuaria",
+    "name": "Actuaría",
+    "cluster": "Negocios",
+    "description": "Modelos de riesgo, seguros, estadística y finanzas cuantitativas.",
+    "tags": [
+      "math",
+      "tech"
+    ],
+    "weights": {
+      "math": 0.8,
+      "tech": 0.2
+    },
+    "minAreas": [
+      "math"
+    ],
+    "roles": [
+      "Analista actuarial (junior)",
+      "Riesgos (junior)",
+      "Pricing (junior)",
+      "Modelación (junior)",
+      "Data analyst (seguros)"
+    ]
+  },
+  {
+    "id": "logistica",
+    "name": "Logística y Cadena de Suministro",
+    "cluster": "Negocios",
+    "description": "Planeación de inventarios, transporte y operaciones.",
+    "tags": [
+      "math",
+      "social",
+      "tech"
+    ],
+    "weights": {
+      "math": 0.45,
+      "social": 0.35,
+      "tech": 0.2
+    },
+    "roles": [
+      "Planeación de demanda (junior)",
+      "Logística",
+      "Compras",
+      "Inventarios",
+      "Operaciones"
+    ]
+  },
+  {
+    "id": "relaciones_internacionales",
+    "name": "Relaciones Internacionales",
+    "cluster": "Humanidades y Sociales",
+    "description": "Análisis político, diplomacia, cooperación y comercio internacional.",
+    "tags": [
+      "social",
+      "language"
+    ],
+    "weights": {
+      "social": 0.6,
+      "language": 0.4
+    },
+    "minAreas": [
+      "social"
+    ],
+    "roles": [
+      "Analista político (junior)",
+      "Comercio exterior (junior)",
+      "Gestión de proyectos (ONG)",
+      "Asuntos públicos (junior)",
+      "Investigación (junior)"
+    ]
+  },
+  {
+    "id": "derecho",
+    "name": "Derecho",
+    "cluster": "Humanidades y Sociales",
+    "description": "Marco legal, argumentación, litigio y consultoría jurídica.",
+    "tags": [
+      "language",
+      "social"
+    ],
+    "weights": {
+      "language": 0.55,
+      "social": 0.45
+    },
+    "minAreas": [
+      "language"
+    ],
+    "roles": [
+      "Pasante jurídico",
+      "Asistente legal",
+      "Compliance (junior)",
+      "Notaría (junior)",
+      "Gestoría"
+    ]
+  },
+  {
+    "id": "psicologia",
+    "name": "Psicología",
+    "cluster": "Humanidades y Sociales",
+    "description": "Comportamiento humano, evaluación e intervención en contextos clínicos/organizacionales.",
+    "tags": [
+      "social",
+      "language",
+      "science"
+    ],
+    "weights": {
+      "social": 0.5,
+      "language": 0.3,
+      "science": 0.2
+    },
+    "roles": [
+      "Auxiliar psicométrico",
+      "Recursos humanos (junior)",
+      "Acompañamiento educativo",
+      "Investigación (junior)",
+      "Psicología organizacional (junior)"
+    ]
+  },
+  {
+    "id": "educacion_pedagogia",
+    "name": "Educación / Pedagogía",
+    "cluster": "Humanidades y Sociales",
+    "description": "Diseño educativo, docencia y desarrollo de programas de aprendizaje.",
+    "tags": [
+      "language",
+      "social"
+    ],
+    "weights": {
+      "language": 0.5,
+      "social": 0.5
+    },
+    "roles": [
+      "Docente (junior)",
+      "Diseño instruccional (junior)",
+      "Coordinación académica (junior)",
+      "Tutoría",
+      "Capacitación"
+    ]
+  },
+  {
+    "id": "comunicacion",
+    "name": "Comunicación",
+    "cluster": "Humanidades y Sociales",
+    "description": "Estrategias de comunicación, medios, narrativa y producción de contenidos.",
+    "tags": [
+      "language",
+      "social",
+      "creative"
+    ],
+    "weights": {
+      "language": 0.5,
+      "social": 0.25,
+      "creative": 0.25
+    },
+    "minAreas": [
+      "language"
+    ],
+    "roles": [
+      "Content creator",
+      "Community manager",
+      "PR (junior)",
+      "Periodismo (junior)",
+      "Comunicación interna"
+    ]
+  },
+  {
+    "id": "periodismo",
+    "name": "Periodismo",
+    "cluster": "Humanidades y Sociales",
+    "description": "Investigación, redacción, verificación y reporteo.",
+    "tags": [
+      "language",
+      "social"
+    ],
+    "weights": {
+      "language": 0.65,
+      "social": 0.35
+    },
+    "minAreas": [
+      "language"
+    ],
+    "roles": [
+      "Reportero/a (junior)",
+      "Editor/a (junior)",
+      "Redactor/a",
+      "Productor/a de contenido",
+      "Fact-checker (junior)"
+    ]
+  },
+  {
+    "id": "trabajo_social",
+    "name": "Trabajo Social",
+    "cluster": "Humanidades y Sociales",
+    "description": "Intervención comunitaria, gestión de apoyos y programas sociales.",
+    "tags": [
+      "social",
+      "language"
+    ],
+    "weights": {
+      "social": 0.65,
+      "language": 0.35
+    },
+    "minAreas": [
+      "social"
+    ],
+    "roles": [
+      "Gestor/a social (junior)",
+      "Programas comunitarios",
+      "ONG (junior)",
+      "Trabajo comunitario",
+      "Vinculación"
+    ]
+  },
+  {
+    "id": "medicina",
+    "name": "Medicina",
+    "cluster": "Salud",
+    "description": "Diagnóstico y atención médica; alta carga científica y ética.",
+    "tags": [
+      "science",
+      "language",
+      "social"
+    ],
+    "weights": {
+      "science": 0.7,
+      "language": 0.15,
+      "social": 0.15
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Médico/a pasante",
+      "Internado",
+      "Investigación clínica (junior)",
+      "Salud pública (junior)",
+      "Asistente clínico"
+    ]
+  },
+  {
+    "id": "enfermeria",
+    "name": "Enfermería",
+    "cluster": "Salud",
+    "description": "Cuidado integral del paciente y gestión clínica.",
+    "tags": [
+      "science",
+      "social",
+      "language"
+    ],
+    "weights": {
+      "science": 0.55,
+      "social": 0.25,
+      "language": 0.2
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Enfermero/a general",
+      "Auxiliar clínico",
+      "Salud comunitaria",
+      "Gestión hospitalaria (junior)",
+      "Investigación (junior)"
+    ]
+  },
+  {
+    "id": "nutricion",
+    "name": "Nutrición",
+    "cluster": "Salud",
+    "description": "Evaluación y planes de alimentación con base científica.",
+    "tags": [
+      "science",
+      "social",
+      "math"
+    ],
+    "weights": {
+      "science": 0.6,
+      "social": 0.25,
+      "math": 0.15
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Nutriólogo/a (junior)",
+      "Nutrición deportiva (junior)",
+      "Salud pública (junior)",
+      "Consultorio (junior)",
+      "Industria alimentaria (junior)"
+    ]
+  },
+  {
+    "id": "qfb",
+    "name": "Químico Farmacéutico Biólogo (QFB)",
+    "cluster": "Salud",
+    "description": "Química, laboratorio, farmacología y control de calidad.",
+    "tags": [
+      "science",
+      "math"
+    ],
+    "weights": {
+      "science": 0.8,
+      "math": 0.2
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Analista de laboratorio",
+      "Control de calidad",
+      "Microbiología (junior)",
+      "Industria farmacéutica (junior)",
+      "Investigación (junior)"
+    ]
+  },
+  {
+    "id": "biotecnologia",
+    "name": "Biotecnología",
+    "cluster": "Ciencias",
+    "description": "Aplicación de biología y química para procesos y productos.",
+    "tags": [
+      "science",
+      "tech",
+      "math"
+    ],
+    "weights": {
+      "science": 0.65,
+      "tech": 0.2,
+      "math": 0.15
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Técnico/a de laboratorio",
+      "Bioprocesos (junior)",
+      "Investigación (junior)",
+      "Control de calidad",
+      "Asistente de proyectos"
+    ]
+  },
+  {
+    "id": "odontologia",
+    "name": "Odontología",
+    "cluster": "Salud",
+    "description": "Salud bucal, diagnóstico y tratamientos odontológicos.",
+    "tags": [
+      "science",
+      "social"
+    ],
+    "weights": {
+      "science": 0.7,
+      "social": 0.3
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Asistente dental",
+      "Odontología (prácticas)",
+      "Gestión de consultorio",
+      "Salud pública dental (junior)",
+      "Investigación (junior)"
+    ]
+  },
+  {
+    "id": "ing_biomedica",
+    "name": "Ingeniería Biomédica",
+    "cluster": "Ciencias",
+    "description": "Tecnología aplicada a dispositivos y sistemas médicos.",
+    "tags": [
+      "science",
+      "math",
+      "tech"
+    ],
+    "weights": {
+      "science": 0.45,
+      "math": 0.35,
+      "tech": 0.2
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Soporte biomédico (junior)",
+      "Ingeniero/a de servicio",
+      "Calibración (junior)",
+      "QA biomédico (junior)",
+      "I+D (junior)"
+    ]
+  },
+  {
+    "id": "veterinaria",
+    "name": "Medicina Veterinaria y Zootecnia",
+    "cluster": "Salud",
+    "description": "Salud animal, producción y bienestar.",
+    "tags": [
+      "science",
+      "social"
+    ],
+    "weights": {
+      "science": 0.75,
+      "social": 0.25
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Asistente veterinario",
+      "Clínica veterinaria (junior)",
+      "Salud pública animal (junior)",
+      "Producción (junior)",
+      "Investigación (junior)"
+    ]
+  },
+  {
+    "id": "ciencias_ambientales",
+    "name": "Ciencias Ambientales",
+    "cluster": "Ciencias",
+    "description": "Estudio y solución de problemas ambientales y sostenibilidad.",
+    "tags": [
+      "science",
+      "social",
+      "math"
+    ],
+    "weights": {
+      "science": 0.6,
+      "social": 0.25,
+      "math": 0.15
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Gestión ambiental (junior)",
+      "Monitoreo ambiental",
+      "Consultoría (junior)",
+      "Seguridad e higiene (junior)",
+      "Sustentabilidad (junior)"
+    ]
+  },
+  {
+    "id": "matematicas_aplicadas",
+    "name": "Matemáticas Aplicadas",
+    "cluster": "Ciencias",
+    "description": "Modelación, optimización y métodos cuantitativos.",
+    "tags": [
+      "math",
+      "science",
+      "tech"
+    ],
+    "weights": {
+      "math": 0.75,
+      "science": 0.15,
+      "tech": 0.1
+    },
+    "minAreas": [
+      "math"
+    ],
+    "roles": [
+      "Analista cuantitativo (junior)",
+      "Investigación (junior)",
+      "Modelación (junior)",
+      "Data analyst",
+      "Planeación (junior)"
+    ]
+  },
+  {
+    "id": "fisica",
+    "name": "Física",
+    "cluster": "Ciencias",
+    "description": "Fundamentos y modelación de fenómenos físicos; base para investigación e ingeniería.",
+    "tags": [
+      "science",
+      "math"
+    ],
+    "weights": {
+      "science": 0.6,
+      "math": 0.4
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Asistente de investigación",
+      "Laboratorio (junior)",
+      "Análisis (junior)",
+      "Docencia (junior)",
+      "Instrumentación (junior)"
+    ]
+  },
+  {
+    "id": "quimica",
+    "name": "Química",
+    "cluster": "Ciencias",
+    "description": "Composición, propiedades y transformación de la materia; laboratorio e industria.",
+    "tags": [
+      "science",
+      "math"
+    ],
+    "weights": {
+      "science": 0.75,
+      "math": 0.25
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Laboratorio químico",
+      "Control de calidad",
+      "Procesos químicos (junior)",
+      "Investigación (junior)",
+      "Seguridad química (junior)"
+    ]
+  },
+  {
+    "id": "biologia",
+    "name": "Biología",
+    "cluster": "Ciencias",
+    "description": "Estudio de organismos y sistemas vivos; laboratorio e investigación.",
+    "tags": [
+      "science",
+      "math"
+    ],
+    "weights": {
+      "science": 0.8,
+      "math": 0.2
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Técnico/a de laboratorio",
+      "Asistente de investigación",
+      "Conservación (junior)",
+      "Microbiología (junior)",
+      "Docencia (junior)"
+    ]
+  },
+  {
+    "id": "ing_alimentos",
+    "name": "Ingeniería en Alimentos",
+    "cluster": "Ciencias",
+    "description": "Procesamiento, seguridad y calidad de alimentos.",
+    "tags": [
+      "science",
+      "math"
+    ],
+    "weights": {
+      "science": 0.7,
+      "math": 0.3
+    },
+    "minAreas": [
+      "science"
+    ],
+    "roles": [
+      "Calidad alimentaria",
+      "Procesos (junior)",
+      "I+D (junior)",
+      "Seguridad e inocuidad",
+      "Laboratorio (junior)"
+    ]
   }
 ]
