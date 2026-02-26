@@ -1,0 +1,32 @@
+[
+  {
+    "nombre": "Ingenieria en Sistemas",
+    "descripcion": "Enfocada en desarrollo de software y arquitectura de sistemas.",
+    "tags": ["tech", "math"]
+  },
+  {
+    "nombre": "Ciencia de Datos",
+    "descripcion": "Analisis de datos, estadistica y modelos predictivos.",
+    "tags": ["math", "science", "tech"]
+  },
+  {
+    "nombre": "Derecho",
+    "descripcion": "Formacion en normas, argumentacion y procesos juridicos.",
+    "tags": ["language", "social"]
+  },
+  {
+    "nombre": "Diseno Grafico",
+    "descripcion": "Creacion visual para medios digitales e impresos.",
+    "tags": ["creative", "tech"]
+  },
+  {
+    "nombre": "Psicologia",
+    "descripcion": "Estudio del comportamiento humano y salud mental.",
+    "tags": ["social", "science"]
+  },
+  {
+    "nombre": "Comunicacion",
+    "descripcion": "Estrategias de narrativa, medios y expresion publica.",
+    "tags": ["language", "creative", "social"]
+  }
+]
