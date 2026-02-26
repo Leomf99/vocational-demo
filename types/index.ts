@@ -12,7 +12,12 @@ export type AreaTag =
   | "creative";
 
 export type Career = {
-  nombre: string;
-  descripcion: string;
+  id: string;
+  name: string;
+  cluster: string;
+  description: string;
   tags: AreaTag[];
+  weights: Partial<Record<AreaTag, number>>;
+  minAreas?: AreaTag[];
+  roles?: string[];
 };

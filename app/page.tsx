@@ -3,6 +3,11 @@
 import { useState } from "react";
 
 import KardexUploader from "@/components/KardexUploader";
+import {
+  recommendCareers,
+  type RecommendationResult,
+} from "@/lib/careerMatcher";
+import { AREA_LABELS_ES, formatReasonsEs } from "@/lib/presenters/areaPresenter";
 import { scoreKardex, type ScoringResult } from "@/lib/scoring";
 import type { KardexRow } from "@/types";
 
@@ -11,6 +16,8 @@ export default function Home() {
   const [parseErrors, setParseErrors] = useState<string[]>([]);
   const [filename, setFilename] = useState<string | null>(null);
   const [scoring, setScoring] = useState<ScoringResult | null>(null);
+  const [recommendations, setRecommendations] =
+    useState<RecommendationResult | null>(null);
 
   const handleParsed = (
     rows: KardexRow[],
@@ -22,11 +29,14 @@ export default function Home() {
     setFilename(parsedFilename);
 
     if (rows.length > 0) {
-      setScoring(scoreKardex(rows));
+      const nextScoring = scoreKardex(rows);
+      setScoring(nextScoring);
+      setRecommendations(recommendCareers(nextScoring));
       return;
     }
 
     setScoring(null);
+    setRecommendations(null);
   };
 
   return (
@@ -74,7 +84,7 @@ export default function Home() {
                 <ul className="list-disc space-y-1 pl-5">
                   {scoring.topAreas.map((area) => (
                     <li key={area.area}>
-                      {area.area}: score {area.score}, avg {area.avg}, n {area.n}
+                      {AREA_LABELS_ES[area.area]}: score {area.score}, avg {area.avg}, n {area.n}
                     </li>
                   ))}
                 </ul>
@@ -99,7 +109,7 @@ export default function Home() {
                     <tbody className="divide-y divide-gray-100 bg-white">
                       {scoring.areas.map((area) => (
                         <tr key={area.area}>
-                          <td className="px-3 py-2">{area.area}</td>
+                          <td className="px-3 py-2">{AREA_LABELS_ES[area.area]}</td>
                           <td className="px-3 py-2">{area.n}</td>
                           <td className="px-3 py-2">{area.avg}</td>
                           <td className="px-3 py-2">{area.score}</td>
@@ -111,18 +121,69 @@ export default function Home() {
               )}
             </div>
 
+            <div>
+              <h3 className="mb-2 font-semibold text-gray-800">Rutas recomendadas</h3>
+              {!recommendations ? (
+                <p className="text-gray-600">Sin recomendaciones aún.</p>
+              ) : (
+                <div className="grid gap-4 md:grid-cols-2">
+                  {recommendations.clusters.map((cluster, clusterIndex) => (
+                    <article
+                      key={`${cluster.cluster}-${clusterIndex}`}
+                      className="rounded-md border border-gray-200 bg-gray-50 p-3"
+                    >
+                      <h4 className="text-base font-semibold text-gray-900">{cluster.cluster}</h4>
+                      <p className="text-sm text-gray-700">
+                        Score {cluster.clusterScore} · {cluster.label}
+                      </p>
+                      {cluster.clusterScore < 70 && (
+                        <p className="mt-1 text-xs text-gray-500">
+                          Ruta alternativa (exploración)
+                        </p>
+                      )}
+
+                      <ul className="mt-3 space-y-3">
+                        {cluster.careers.map((match) => {
+                          const reasonsText = formatReasonsEs(match.reasons);
+
+                          return (
+                            <li key={match.career.id} className="rounded-md border border-gray-200 bg-white p-2">
+                              <p className="font-medium text-gray-900">{match.career.name}</p>
+                              <p className="text-sm text-gray-700">
+                                Score {match.score} · {match.label}
+                              </p>
+                              {reasonsText && (
+                                <p className="text-sm text-gray-600">{reasonsText}</p>
+                              )}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="grid gap-4 md:grid-cols-2">
               <div className="rounded-md border border-gray-200 p-3">
                 <h3 className="mb-2 font-semibold text-gray-800">Ejemplos clasificados</h3>
                 {scoring.classified.length === 0 ? (
                   <p className="text-gray-600">Sin elementos clasificados.</p>
                 ) : (
-                  <ul className="space-y-1">
-                    {scoring.classified.slice(0, 3).map((item, index) => (
-                      <li key={`${item.materiaOriginal}-${index}`}>
-                        {item.materiaOriginal} {"->"} {item.area} ({item.matchedKeyword})
-                      </li>
-                    ))}
+                  <ul className="space-y-2">
+                    {scoring.classified.slice(0, 3).map((item, index) => {
+                      const reasonText = `Se clasificó en ${AREA_LABELS_ES[item.area]}.`;
+
+                      return (
+                        <li key={`${item.materiaOriginal}-${index}`}>
+                          <p>{item.materiaOriginal}</p>
+                          {reasonText && (
+                            <p className="text-gray-600">{reasonText}</p>
+                          )}
+                        </li>
+                      );
+                    })}
                   </ul>
                 )}
               </div>
