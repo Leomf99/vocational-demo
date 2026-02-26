@@ -1,0 +1,355 @@
+diff --git a/README.md b/README.md
+index 400b2ce..f634666 100644
+--- a/README.md
++++ b/README.md
+@@ -16,12 +16,32 @@ Abrir en `http://localhost:3000`.
+ - `app/`: rutas y UI principal (App Router).
+ - `components/`: componentes reutilizables de interfaz.
+ - `lib/`: utilidades de normalizacion y scoring (placeholders).
+-- `data/`: datos estaticos para demo (`careers.json`).
++- `data/`: datos estaticos y CSV de ejemplo.
+ - `types/`: tipos compartidos del dominio.
+ 
+-## Roadmap (proximos pasos)
++## Formato del CSV esperado
+ 
+-1. Implementar parseo de CSV en `KardexUploader`.
+-2. Implementar normalizacion de materias en `lib/normalize.ts`.
+-3. Implementar scoring en `lib/scoring.ts`.
+-4. Mapear resultados de scoring a carreras de `data/careers.json`.
++El uploader acepta archivos `.csv` con encabezados (case-insensitive):
++
++- Materia: `materia` o `subject`
++- Calificacion: `calificacion` o `grade`
++
++Ejemplo:
++
++```csv
++materia,calificacion
++Matematicas I,92
++Programacion I,95
++```
++
++Reglas actuales de validacion:
++
++- Se ignoran filas vacias (`skipEmptyLines: true`).
++- `calificacion` debe ser numero en rango de `0` a `100`.
++- Se muestran filas validas y lista de errores detectados.
++
++## Estado actual
++
++- Ya hay parseo con PapaParse y preview de las primeras 10 filas validas.
++- Ya hay validacion basica de columnas y calificaciones.
++- Aun no hay scoring ni recomendacion de carreras.
+diff --git a/app/page.tsx b/app/page.tsx
+index 47d3d97..1b157d8 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -8,15 +8,17 @@ export default function Home() {
+           Demo Vocacional por Fortalezas
+         </h1>
+         <p className="text-sm text-gray-600">
+-          Carga base para evolucionar el scoring por calificaciones.
++          Carga de kardex en CSV con preview y validacion basica.
+         </p>
+       </header>
+ 
+       <KardexUploader />
+ 
+       <section className="rounded-lg border border-gray-200 bg-white p-4">
+-        <h2 className="mb-2 text-lg font-semibold">Resultados</h2>
+-        <p className="text-sm text-gray-600">Aún sin resultados</p>
++        <h2 className="mb-2 text-lg font-semibold">Resultados (pendiente)</h2>
++        <p className="text-sm text-gray-600">
++          El scoring y el mapeo de carreras se implementaran en el siguiente incremento.
++        </p>
+       </section>
+     </main>
+   );
+diff --git a/components/KardexUploader.tsx b/components/KardexUploader.tsx
+index 6793b0a..043f163 100644
+--- a/components/KardexUploader.tsx
++++ b/components/KardexUploader.tsx
+@@ -1,18 +1,205 @@
+ "use client";
+ 
++import { useMemo, useState } from "react";
++import Papa from "papaparse";
++
++import type { KardexRow } from "@/types";
++
++type RawCsvRow = Record<string, unknown>;
++
++const SUBJECT_KEYS = new Set(["materia", "subject"]);
++const GRADE_KEYS = new Set(["calificacion", "grade"]);
++
++function normalizeHeader(input: string): string {
++  return input
++    .trim()
++    .toLowerCase()
++    .normalize("NFD")
++    .replace(/[\u0300-\u036f]/g, "")
++    .replace(/[^a-z0-9]/g, "");
++}
++
++function getValueByAliases(
++  row: RawCsvRow,
++  aliases: Set<string>,
++): string | undefined {
++  for (const [key, value] of Object.entries(row)) {
++    if (aliases.has(normalizeHeader(key))) {
++      return value === undefined || value === null ? "" : String(value);
++    }
++  }
++
++  return undefined;
++}
++
+ export default function KardexUploader() {
++  const [rows, setRows] = useState<KardexRow[]>([]);
++  const [errors, setErrors] = useState<string[]>([]);
++  const [filename, setFilename] = useState<string | null>(null);
++
++  const previewRows = useMemo(() => rows.slice(0, 10), [rows]);
++  const previewErrors = useMemo(() => errors.slice(0, 10), [errors]);
++
++  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
++    const file = event.target.files?.[0];
++
++    if (!file) {
++      setFilename(null);
++      setRows([]);
++      setErrors([]);
++      return;
++    }
++
++    setFilename(file.name);
++
++    Papa.parse<RawCsvRow>(file, {
++      header: true,
++      skipEmptyLines: true,
++      complete: (result) => {
++        const validRows: KardexRow[] = [];
++        const parseErrors: string[] = [];
++
++        const fields = result.meta.fields ?? [];
++        const hasSubjectColumn = fields.some((field) =>
++          SUBJECT_KEYS.has(normalizeHeader(field)),
++        );
++        const hasGradeColumn = fields.some((field) =>
++          GRADE_KEYS.has(normalizeHeader(field)),
++        );
++
++        if (!hasSubjectColumn) {
++          parseErrors.push(
++            'No se encontro columna de materia. Usa "materia" o "subject".',
++          );
++        }
++
++        if (!hasGradeColumn) {
++          parseErrors.push(
++            'No se encontro columna de calificacion. Usa "calificacion" o "grade".',
++          );
++        }
++
++        for (const csvError of result.errors) {
++          const rowInfo =
++            typeof csvError.row === "number" ? `fila ${csvError.row + 1}` : "fila desconocida";
++          parseErrors.push(`Error de CSV en ${rowInfo}: ${csvError.message}`);
++        }
++
++        result.data.forEach((row, index) => {
++          const line = index + 2;
++          const materiaRaw = getValueByAliases(row, SUBJECT_KEYS);
++          const calificacionRaw = getValueByAliases(row, GRADE_KEYS);
++
++          const materia = (materiaRaw ?? "").trim();
++          if (!materia) {
++            parseErrors.push(
++              `Fila ${line}: materia vacia o columna no reconocida (materia/subject).`,
++            );
++            return;
++          }
++
++          const calificacionText = (calificacionRaw ?? "").trim().replace(",", ".");
++          if (!calificacionText) {
++            parseErrors.push(
++              `Fila ${line}: calificacion vacia o columna no reconocida (calificacion/grade).`,
++            );
++            return;
++          }
++
++          const calificacion = Number(calificacionText);
++          if (!Number.isFinite(calificacion)) {
++            parseErrors.push(
++              `Fila ${line}: calificacion invalida "${calificacionText}" (debe ser numero entre 0 y 100).`,
++            );
++            return;
++          }
++
++          if (calificacion < 0 || calificacion > 100) {
++            parseErrors.push(
++              `Fila ${line}: calificacion fuera de rango (${calificacion}). Debe estar entre 0 y 100.`,
++            );
++            return;
++          }
++
++          validRows.push({ materia, calificacion });
++        });
++
++        setRows(validRows);
++        setErrors(parseErrors);
++      },
++      error: (error) => {
++        setRows([]);
++        setErrors([`No se pudo leer el archivo: ${error.message}`]);
++      },
++    });
++  };
++
+   return (
+     <section className="rounded-lg border border-gray-200 bg-white p-4">
+       <p className="mb-3 text-sm font-medium text-gray-700">Sube tu CSV (demo)</p>
+-      <label className="inline-flex cursor-pointer items-center rounded-md border border-gray-300 bg-gray-50 px-3 py-2 text-sm text-gray-700 hover:bg-gray-100">
+-        <span>Seleccionar archivo</span>
+-        <input
+-          type="file"
+-          accept=".csv"
+-          className="sr-only"
+-          aria-label="Subir archivo CSV"
+-        />
+-      </label>
++
++      <input
++        type="file"
++        accept=".csv,text/csv"
++        onChange={handleFileChange}
++        className="mb-4 block w-full text-sm text-gray-700 file:mr-3 file:rounded-md file:border file:border-gray-300 file:bg-gray-50 file:px-3 file:py-2 file:text-sm file:text-gray-700 hover:file:bg-gray-100"
++        aria-label="Subir archivo CSV"
++      />
++
++      {filename && (
++        <div className="space-y-3">
++          <div className="rounded-md bg-gray-50 p-3 text-sm text-gray-700">
++            <p>
++              <span className="font-semibold">Archivo:</span> {filename}
++            </p>
++            <p>
++              <span className="font-semibold">Filas validas:</span> {rows.length}
++            </p>
++          </div>
++
++          <div>
++            <h3 className="mb-2 text-sm font-semibold text-gray-800">Preview (primeras 10 filas validas)</h3>
++            {previewRows.length === 0 ? (
++              <p className="text-sm text-gray-600">Sin filas validas para mostrar.</p>
++            ) : (
++              <div className="overflow-x-auto rounded-md border border-gray-200">
++                <table className="min-w-full divide-y divide-gray-200 text-sm">
++                  <thead className="bg-gray-50">
++                    <tr>
++                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Materia</th>
++                      <th className="px-3 py-2 text-left font-semibold text-gray-700">Calificacion</th>
++                    </tr>
++                  </thead>
++                  <tbody className="divide-y divide-gray-100 bg-white">
++                    {previewRows.map((row, index) => (
++                      <tr key={`${row.materia}-${index}`}>
++                        <td className="px-3 py-2 text-gray-700">{row.materia}</td>
++                        <td className="px-3 py-2 text-gray-700">{row.calificacion}</td>
++                      </tr>
++                    ))}
++                  </tbody>
++                </table>
++              </div>
++            )}
++          </div>
++
++          {errors.length > 0 && (
++            <div>
++              <h3 className="mb-2 text-sm font-semibold text-red-700">Errores detectados</h3>
++              <ul className="list-disc space-y-1 pl-5 text-sm text-red-700">
++                {previewErrors.map((error, index) => (
++                  <li key={`${error}-${index}`}>{error}</li>
++                ))}
++              </ul>
++              {errors.length > previewErrors.length && (
++                <p className="mt-2 text-sm text-red-700">
++                  ... y {errors.length - previewErrors.length} errores mas.
++                </p>
++              )}
++            </div>
++          )}
++        </div>
++      )}
+     </section>
+   );
+ }
+diff --git a/package-lock.json b/package-lock.json
+index 78154af..2280f22 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -9,12 +9,14 @@
+       "version": "0.1.0",
+       "dependencies": {
+         "next": "16.1.6",
++        "papaparse": "^5.5.3",
+         "react": "19.2.3",
+         "react-dom": "19.2.3"
+       },
+       "devDependencies": {
+         "@tailwindcss/postcss": "^4",
+         "@types/node": "^20",
++        "@types/papaparse": "^5.5.2",
+         "@types/react": "^19",
+         "@types/react-dom": "^19",
+         "eslint": "^9",
+@@ -1555,6 +1557,16 @@
+         "undici-types": "~6.21.0"
+       }
+     },
++    "node_modules/@types/papaparse": {
++      "version": "5.5.2",
++      "resolved": "https://registry.npmjs.org/@types/papaparse/-/papaparse-5.5.2.tgz",
++      "integrity": "sha512-gFnFp/JMzLHCwRf7tQHrNnfhN4eYBVYYI897CGX4MY1tzY9l2aLkVyx2IlKZ/SAqDbB3I1AOZW5gTMGGsqWliA==",
++      "dev": true,
++      "license": "MIT",
++      "dependencies": {
++        "@types/node": "*"
++      }
++    },
+     "node_modules/@types/react": {
+       "version": "19.2.14",
+       "resolved": "https://registry.npmjs.org/@types/react/-/react-19.2.14.tgz",
+@@ -5281,6 +5293,12 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
++    "node_modules/papaparse": {
++      "version": "5.5.3",
++      "resolved": "https://registry.npmjs.org/papaparse/-/papaparse-5.5.3.tgz",
++      "integrity": "sha512-5QvjGxYVjxO59MGU2lHVYpRWBBtKHnlIAcSe1uNFCkkptUh63NFRj0FJQm7nR67puEruUci/ZkjmEFrjCAyP4A==",
++      "license": "MIT"
++    },
+     "node_modules/parent-module": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/parent-module/-/parent-module-1.0.1.tgz",
+diff --git a/package.json b/package.json
+index c128b95..a7194e5 100644
+--- a/package.json
++++ b/package.json
+@@ -10,12 +10,14 @@
+   },
+   "dependencies": {
+     "next": "16.1.6",
++    "papaparse": "^5.5.3",
+     "react": "19.2.3",
+     "react-dom": "19.2.3"
+   },
+   "devDependencies": {
+     "@tailwindcss/postcss": "^4",
+     "@types/node": "^20",
++    "@types/papaparse": "^5.5.2",
+     "@types/react": "^19",
+     "@types/react-dom": "^19",
+     "eslint": "^9",

@@ -8,15 +8,17 @@ export default function Home() {
           Demo Vocacional por Fortalezas
         </h1>
         <p className="text-sm text-gray-600">
-          Carga base para evolucionar el scoring por calificaciones.
+          Carga de kardex en CSV con preview y validacion basica.
         </p>
       </header>
 
       <KardexUploader />
 
       <section className="rounded-lg border border-gray-200 bg-white p-4">
-        <h2 className="mb-2 text-lg font-semibold">Resultados</h2>
-        <p className="text-sm text-gray-600">Aún sin resultados</p>
+        <h2 className="mb-2 text-lg font-semibold">Resultados (pendiente)</h2>
+        <p className="text-sm text-gray-600">
+          El scoring y el mapeo de carreras se implementaran en el siguiente incremento.
+        </p>
       </section>
     </main>
   );
