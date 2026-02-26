@@ -7,6 +7,10 @@ import type { KardexRow } from "@/types";
 
 type RawCsvRow = Record<string, unknown>;
 
+type KardexUploaderProps = {
+  onParsed?: (rows: KardexRow[], errors: string[], filename: string | null) => void;
+};
+
 const SUBJECT_KEYS = new Set(["materia", "subject"]);
 const GRADE_KEYS = new Set(["calificacion", "grade"]);
 
@@ -32,7 +36,7 @@ function getValueByAliases(
   return undefined;
 }
 
-export default function KardexUploader() {
+export default function KardexUploader({ onParsed }: KardexUploaderProps) {
   const [rows, setRows] = useState<KardexRow[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [filename, setFilename] = useState<string | null>(null);
@@ -52,6 +56,7 @@ export default function KardexUploader() {
       setRows([]);
       setErrors([]);
       setShowAllRows(false);
+      onParsed?.([], [], null);
       return;
     }
 
@@ -86,7 +91,9 @@ export default function KardexUploader() {
 
         for (const csvError of result.errors) {
           const rowInfo =
-            typeof csvError.row === "number" ? `fila ${csvError.row + 1}` : "fila desconocida";
+            typeof csvError.row === "number"
+              ? `fila ${csvError.row + 1}`
+              : "fila desconocida";
           parseErrors.push(`Error de CSV en ${rowInfo}: ${csvError.message}`);
         }
 
@@ -132,11 +139,15 @@ export default function KardexUploader() {
         setRows(validRows);
         setErrors(parseErrors);
         setShowAllRows(false);
+        onParsed?.(validRows, parseErrors, file.name);
       },
       error: (error) => {
+        const readErrors = [`No se pudo leer el archivo: ${error.message}`];
+        setFilename(null);
         setRows([]);
-        setErrors([`No se pudo leer el archivo: ${error.message}`]);
+        setErrors(readErrors);
         setShowAllRows(false);
+        onParsed?.([], readErrors, null);
       },
     });
   };
