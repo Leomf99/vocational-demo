@@ -15,9 +15,10 @@ Abrir en `http://localhost:3000`.
 
 - `app/`: rutas y UI principal (App Router).
 - `components/`: componentes reutilizables de interfaz.
-- `lib/`: utilidades de normalizacion y scoring (placeholders).
+- `lib/`: utilidades de normalizacion y scoring.
 - `data/`: datos estaticos y CSV de ejemplo.
 - `types/`: tipos compartidos del dominio.
+- `scripts/`: pruebas manuales para utilidades.
 
 ## Formato del CSV esperado
 
@@ -44,4 +45,13 @@ Reglas actuales de validacion:
 
 - Ya hay parseo con PapaParse y preview de las primeras 10 filas validas.
 - Ya hay validacion basica de columnas y calificaciones.
-- Aun no hay scoring ni recomendacion de carreras.
+- Ya existe motor de scoring en `lib/`.
+- Aun no hay recomendacion de carreras en UI.
+
+## Probar el scoring (sin UI)
+
+```bash
+npx tsx scripts/test-scoring.ts
+```
+
+Este script ejecuta `scoreKardex` con datos de ejemplo y muestra el resultado en JSON.
