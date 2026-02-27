@@ -1,57 +1,143 @@
-# Demo Vocacional (Next.js App Router)
+# Demo Vocacional por Fortalezas
 
-Base incremental para un proyecto que estima fortalezas academicas de un alumno a partir de su kardex.
+Sistema experimental de orientación vocacional basado en el análisis de
+un kardex (CSV) de preparatoria.
 
-## Como correr el proyecto
+El sistema:
 
-```bash
-npm install
-npm run dev
-```
+1.  Clasifica materias en áreas de competencia.
+2.  Calcula fortalezas con factor de confianza.
+3.  Recomienda rutas académicas (clusters).
+4.  Sugiere carreras específicas con explicación automática.
 
-Abrir en `http://localhost:3000`.
+---
 
-## Estructura de carpetas
+## Tecnologías
 
-- `app/`: rutas y UI principal (App Router).
-- `components/`: componentes reutilizables de interfaz.
-- `lib/`: utilidades de normalizacion y scoring.
-- `data/`: datos estaticos y CSV de ejemplo.
-- `types/`: tipos compartidos del dominio.
-- `scripts/`: pruebas manuales para utilidades.
+- Next.js (App Router)
+- TypeScript
+- PapaParse (lectura de CSV)
+- TailwindCSS
+- Motor de scoring determinístico (sin IA)
+- Sistema de recomendación basado en pesos por área
+
+---
+
+## Cómo funciona
+
+### 1. Clasificación de materias
+
+Cada materia del kardex se normaliza y se compara contra un diccionario
+de palabras clave para clasificarla en una de estas áreas:
+
+- Creatividad
+- Matemáticas
+- Ciencias
+- Lenguaje y Comunicación
+- Ciencias Sociales
+- Tecnología
+
+---
+
+### 2. Cálculo de fortalezas
+
+Por cada área se calcula:
+
+- n (cantidad de materias)
+- avg (promedio)
+- score (promedio ajustado por factor de confianza)
+
+Factor de confianza: - 1 materia → 0.85 - 2 materias → 0.93 - 3+
+materias → 1
+
+---
+
+### 3. Recomendación de carreras (Mixto Inteligente)
+
+El sistema:
+
+1.  Calcula compatibilidad por carrera usando pesos por área.
+2.  Agrupa por cluster (ruta académica).
+3.  Calcula score por cluster usando el promedio de sus top 3 carreras.
+4.  Siempre muestra 2 rutas:
+    - Ruta principal
+    - Ruta alternativa (exploración)
+
+Cada carrera muestra: - Score numérico - Etiqueta cualitativa: - Muy
+alta compatibilidad - Alta compatibilidad - Compatibilidad media -
+Compatibilidad baja - Explicación automática: \> Se alinea con tu
+fortaleza en Creatividad y Lenguaje y Comunicación.
+
+---
+
+## Estructura del Proyecto
+
+    app/
+    components/
+    lib/
+      scoring.ts
+      careerMatcher.ts
+      presenters/
+        areaPresenter.ts
+    data/
+      careers.json
+    types/
+    scripts/
+      test-scoring.ts
+      test-career-matcher.ts
+
+---
 
 ## Formato del CSV esperado
 
-El uploader acepta archivos `.csv` con encabezados (case-insensitive):
+Columnas (case-insensitive):
 
-- Materia: `materia` o `subject`
-- Calificacion: `calificacion` o `grade`
+- materia o subject
+- calificacion o grade
 
 Ejemplo:
 
-```csv
-materia,calificacion
-Matematicas I,92
-Programacion I,95
-```
+    materia,calificacion
+    Matematicas I,92
+    Programacion I,95
 
-Reglas actuales de validacion:
+Reglas:
 
-- Se ignoran filas vacias (`skipEmptyLines: true`).
-- `calificacion` debe ser numero en rango de `0` a `100`.
-- Se muestran filas validas y lista de errores detectados.
+- Calificación entre 0 y 100
+- Filas vacías se ignoran
+- Errores se reportan
 
-## Estado actual
+---
 
-- Ya hay parseo con PapaParse y preview de las primeras 10 filas validas.
-- Ya hay validacion basica de columnas y calificaciones.
-- Ya existe motor de scoring en `lib/`.
-- Aun no hay recomendacion de carreras en UI.
+## Scripts de prueba
 
-## Probar el scoring (sin UI)
+Probar scoring:
 
-```bash
-npx tsx scripts/test-scoring.ts
-```
+    npx tsx scripts/test-scoring.ts
 
-Este script ejecuta `scoreKardex` con datos de ejemplo y muestra el resultado en JSON.
+Probar recomendación:
+
+    npx tsx scripts/test-career-matcher.ts
+
+---
+
+## Objetivo del Proyecto
+
+Explorar una alternativa explicable y determinística a los sistemas
+tradicionales de orientación vocacional, evitando modelos opacos y
+priorizando:
+
+- Transparencia
+- Interpretabilidad
+- Simplicidad matemática
+- UX clara
+
+---
+
+## Próximos pasos posibles
+
+- Conectar vacantes reales por cluster
+- Exportar reporte PDF
+- Agregar visualización gráfica de fortalezas
+- Comparativa percentil contra otros perfiles
+- Integrar intereses declarados además del kardex
